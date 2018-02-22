@@ -28,3 +28,7 @@ Collectibles are invisible till hit by the sonar. They add to your score when co
 
 The gun shoots little balls that only destroy the enemies in a certain range. This allows the enemies to chase after the player for a long time, forcing the player to turn around and kill the enemies. In the future, this will have an ammo limit, making the choice much more meaningful. But for testing purposes, unlimited ammo was best.
 
+## The future
+
+In the future, Id like this project to build upon the sonar and gun features. The gun given ammo and the sonar system more standardized.
+I would refactor most of the code because prototype code was useful but not very well designed. Overall, I think spending more time in the architecture phase of development would benefit this project greatly. But just pushing out a prototype was very helpful also. It allowed for testing and feedback. Now, when this game is rebuilt, it will turn out much better thanks to this information.
