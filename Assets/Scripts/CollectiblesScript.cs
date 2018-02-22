@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class CollectiblesScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public GameObject gameController;
+
+    private void Start()
+    {
+        gameController = GameObject.FindGameObjectWithTag("GameController");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            Destroy(this.gameObject);
+            gameController.GetComponent<GameController>().count++;
+        }
+    }
 }

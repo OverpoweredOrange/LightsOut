@@ -3,42 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//acting weird
-
 public class RevealScript : MonoBehaviour {
 
-    public Color colorStart = Color.black;
-    public Color colorEnd = Color.red;
+    public Color colorStart;
+    public Color color1;
+    public Color color2;
+    List<Color> colors = new List<Color>();
     public Renderer rend;
 
     PlayerController playercontrollerscript;
-
-    bool gameRunning;
     bool destroyable;
 
     public Image proximityAlarm;
-    public Color safe;
-    public Color danger;
+    Color safe;
+    Color danger;
 
     void Start () {
+            colorStart = Color.black;
+            color1 = Color.red;
+            color2 = Color.blue;
+            safe = Color.green;
+        danger = Color.red;
         rend = GetComponent<Renderer>();
         rend.material.color = colorStart;
         destroyable = false;
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        playercontrollerscript = player.GetComponent<PlayerController>();
-        gameRunning = playercontrollerscript.gameRunning;
-    }
-
-    private void Update()
-    {
-        gameRunning = playercontrollerscript.gameRunning;
+        colors.Add(color1);
+        colors.Add(color2);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("LightCollider"))
+        if (other.CompareTag("Sonar"))
         {
-            rend.material.color = colorEnd;
+            if (this.gameObject.CompareTag("Enemy") && !this.gameObject.GetComponent<EnemyMovementController>().activated)
+                this.gameObject.GetComponent<EnemyMovementController>().activated = true;
+                
+            rend.material.color = colors[Random.Range(0,colors.Count)];
             destroyable = true;
             proximityAlarm.color = danger;
         }
@@ -53,9 +53,18 @@ public class RevealScript : MonoBehaviour {
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Sonar"))
+        {
+            destroyable = true;
+            proximityAlarm.color = danger;
+        }
+    }
+
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("LightCollider"))
+        if (other.CompareTag("Sonar"))
         {
             rend.material.color = colorStart;
             destroyable = false;

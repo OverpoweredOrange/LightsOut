@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour {
     bool sonarActive;
     public float sonarSpeed;
     public float maxSonarRadius;
+    float originalSonarRadius;
+    public float sonarRechargeTime;
+    float currentSonarRechargeTime;
 
     public GameController gameController;
 
@@ -27,18 +30,19 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         canSonar = true;
         sonarActive = false;
-        sonar.radius = 0;
-
+        originalSonarRadius = sonar.radius;
+        sonar.radius = originalSonarRadius;
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     private void Update()
     {
         //Sonar Controls
-        if(Input.GetButtonDown("Fire2") && canSonar)
+        if(gameRunning && Input.GetButtonDown("Fire2") && canSonar)
         {
             sonarActive = true;
             canSonar = false;
+            currentSonarRechargeTime = sonarRechargeTime + Time.time;
         }
 
         if(sonarActive)
@@ -47,12 +51,12 @@ public class PlayerController : MonoBehaviour {
             if(sonar.radius >= maxSonarRadius)
             {
                 sonarActive = false;
-                canSonar = true;
-                sonar.radius = 0;
+                sonar.radius = originalSonarRadius;
             }
         }
 
-
+        if(Time.time >= currentSonarRechargeTime)
+            canSonar = true;
     }
 
     void FixedUpdate () {
@@ -69,7 +73,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         //Fire 
-        if(Input.GetButtonDown("Fire1"))
+        if(gameRunning && Input.GetButtonDown("Fire1"))
         {
             GameObject clone = Instantiate(projectile, PlayerAttackTransform.position, PlayerAttackTransform.rotation);
             clone.GetComponent<ProjectileMovementScript>().speed = bulletSpeed;
